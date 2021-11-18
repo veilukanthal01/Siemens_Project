@@ -7,6 +7,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.veilu.sprinboot.entity.Employee;
+import com.veilu.sprinboot.exception.EmployeeAlredayExistsException;
+import com.veilu.sprinboot.exception.EmployeeNotFoundException;
+import com.veilu.sprinboot.exception.OrganizationAlredayExistsException;
+import com.veilu.sprinboot.exception.OrganizationNotFoundException;
 import com.veilu.sprinboot.repository.EmployeeRepository;
 
 @Service
@@ -15,7 +19,7 @@ public class EmployeeService {
 	@Autowired
 	private EmployeeRepository employeeRepository;
 	
-	public Employee saveEmployee(Employee employee) {
+	public Employee saveEmployee(Employee employee) throws EmployeeAlredayExistsException{
 		return this.employeeRepository.save(employee);
 		
 	}
@@ -25,7 +29,10 @@ public class EmployeeService {
 		
 	}
 	
-	public Employee findEmployeeById(long empId) {
+	public Employee findEmployeeById(long empId) throws EmployeeNotFoundException {
+		if(this.employeeRepository.findById(empId).isEmpty()) {
+			throw new EmployeeNotFoundException("Employee not found with the Id : "+ empId);
+		}
 		return this.employeeRepository.findById(empId).get();
 	}
 

@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.veilu.sprinboot.entity.Employee;
 import com.veilu.sprinboot.entity.Organization;
+import com.veilu.sprinboot.exception.EmployeeNotFoundException;
 import com.veilu.sprinboot.exception.OrganizationAlredayExistsException;
 import com.veilu.sprinboot.exception.OrganizationNotFoundException;
 import com.veilu.sprinboot.service.EmployeeService;
@@ -53,7 +54,13 @@ public class EmployeeController {
 	
 	@GetMapping("/{empId}")
 	public ResponseEntity getOrgById(@PathVariable long empId){
+		try {
 			 return new ResponseEntity<Employee>(this.employeeService.findEmployeeById(empId), HttpStatus.OK);
+		}
+		catch(EmployeeNotFoundException eex) {
+			return new ResponseEntity<>(eex.getMessage(), HttpStatus.NOT_FOUND);
+		}
+			
 		
 		}
 
