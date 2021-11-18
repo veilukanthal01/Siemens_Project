@@ -39,7 +39,7 @@ public class OrganizationService {
 			}
 		
 	}
-	public Organization findOrgById(long orgId)  throws OrganizationNotFoundException {
+	public Organization findOrgById(long orgId) {
 		return this.organizationRepository.findById(orgId).get();
 	}
 	

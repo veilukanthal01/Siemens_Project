@@ -51,14 +51,22 @@ public class AssetController {
 		
 	}
 	
-	@PutMapping("/{assetId}/organization/{orgId}") public Assets assignAssetToOrganization(
+	@PutMapping("/{assetId}/organization/{orgId}") public ResponseEntity assignAssetToOrganization(
 			@PathVariable long assetId,
 			@PathVariable long orgId
 			) {
+		try {
 		Assets asset = assetsService.findById(assetId);
 		Organization org = organizationService.findById(orgId);
 		asset.setOrganization(org);
-		return this.assetsService.mapAssetWithOrg(asset);
+		return new ResponseEntity<Assets>(this.assetsService.mapAssetWithOrg(asset), HttpStatus.OK);
+		}
+		catch(AssetNotFoundException aex) {
+			return new ResponseEntity<>(aex.getMessage(), HttpStatus.NOT_FOUND);
+		}
+		catch (OrganizationNotFoundException ex) {
+			return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);
+		}
 	}
 	
 	@GetMapping("/{assetId}")

@@ -31,6 +31,10 @@ public class Assets {
 	@JoinColumn(name = "org_id" , referencedColumnName = "id")
 	private Organization organization;
 	
+	@ManyToOne()
+	@JoinColumn(name = "emp_id" , referencedColumnName = "id")
+	private Employee employee;
+	
 	public Assets() {
 		
 	}
@@ -59,5 +63,14 @@ public class Assets {
 	public void setOrganization(Organization organization) {
 		this.organization = organization;
 	}
+
+	public Employee getEmployee() {
+		return employee;
+	}
+
+	public void setEmployee(Employee employee) {
+		this.employee = employee;
+	}
+	
 	
 }
