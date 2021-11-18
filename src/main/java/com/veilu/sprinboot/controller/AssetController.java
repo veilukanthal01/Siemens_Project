@@ -1,8 +1,11 @@
 package com.veilu.sprinboot.controller;
 
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -14,6 +17,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.veilu.sprinboot.entity.Assets;
 import com.veilu.sprinboot.entity.Organization;
+import com.veilu.sprinboot.exception.AssetAlredayExistsException;
+import com.veilu.sprinboot.exception.AssetNotFoundException;
+import com.veilu.sprinboot.exception.OrganizationAlredayExistsException;
+import com.veilu.sprinboot.exception.OrganizationNotFoundException;
 import com.veilu.sprinboot.service.AssetsService;
 import com.veilu.sprinboot.service.OrganizationService;
 
@@ -34,29 +41,39 @@ public class AssetController {
 	}
 	
 	@PostMapping
-	public Assets createAsset(@RequestBody Assets asset) {
-		return this.assetsService.saveAsset(asset);
+	public ResponseEntity createAsset(@RequestBody Assets asset) {
+		try {
+			 return new ResponseEntity<Assets>(this.assetsService.saveAsset(asset), HttpStatus.OK);
+		}
+		catch (AssetAlredayExistsException ee){
+			return new ResponseEntity<>(ee.getMessage(), HttpStatus.CONFLICT);
+		}
+		
 	}
 	
-	@PutMapping("/{subjectId}/organization/{orgId}") public Assets assignAssetToOrganization(
-			@PathVariable long subjectId,
+	@PutMapping("/{assetId}/organization/{orgId}") public Assets assignAssetToOrganization(
+			@PathVariable long assetId,
 			@PathVariable long orgId
 			) {
-		Assets asset = assetsService.findById(subjectId);
+		Assets asset = assetsService.findById(assetId);
 		Organization org = organizationService.findById(orgId);
 		asset.setOrganization(org);
-		return this.assetsService.saveAsset(asset);
+		return this.assetsService.mapAssetWithOrg(asset);
 	}
 	
 	@GetMapping("/{assetId}")
-	public Assets getAssetById(@PathVariable long assetId){
-		return this.assetsService.findById(assetId);
+	public ResponseEntity getAssetById(@PathVariable long assetId){
+		try {
+			 return new ResponseEntity<Assets>(this.assetsService.findById(assetId), HttpStatus.OK);
+		}
+		catch (AssetNotFoundException ex) {
+			return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);
+		}
 		
 	}
 	
 	@DeleteMapping("/{assetId}")
 	public String deleteAssetById(@PathVariable long assetId){
-		Assets asset = assetsService.findById(assetId);
 		this.assetsService.deleteAssetById(assetId);
 		return"success";
 		

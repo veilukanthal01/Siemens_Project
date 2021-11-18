@@ -1,7 +1,9 @@
 package com.veilu.sprinboot.entity;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -12,26 +14,30 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
-@Table(name = "organization")
+@Table(name = "organization", uniqueConstraints = {
+		@UniqueConstraint(columnNames = "id"),
+		@UniqueConstraint(columnNames = "org_name") })
 public class Organization {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "id",unique = true, nullable = false)
 	private long id;
 	
-	@Column(name = "org_name")
+	@Column(name = "org_name", unique = true, nullable = false, length = 100)
 	private String name;
 	
-	@Column
+	@Column(unique = false, nullable = false, length = 100)
 	private String country;
 	
 	@JsonIgnore
 	@OneToMany(mappedBy = "organization", cascade = CascadeType.ALL)
-	List<Assets> assets = new ArrayList<Assets>();
+	Set<Assets> assets = new HashSet<Assets>();
 	
 	public Organization() {
 		
@@ -60,10 +66,12 @@ public class Organization {
 	public void setCountry(String country) {
 		this.country = country;
 	}
-	public List<Assets> getAssets() {
+
+	public Set<Assets> getAssets() {
 		return assets;
 	}
-	public void setAssets(List<Assets> assets) {
+
+	public void setAssets(Set<Assets> assets) {
 		this.assets = assets;
 	}
 	

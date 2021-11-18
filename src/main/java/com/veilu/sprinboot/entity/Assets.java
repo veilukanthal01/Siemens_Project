@@ -9,18 +9,22 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
-@Table(name = "assets")
+@Table(name = "assets", uniqueConstraints = {
+		@UniqueConstraint(columnNames = "id"),
+		@UniqueConstraint(columnNames = "serialNumber") })
 public class Assets {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "id",unique = true, nullable = false)
 	private long id;
 	
-	@Column
+	@Column(unique = false, nullable = false, length = 100)
 	private String serialNumber;
 	
 	@ManyToOne()
