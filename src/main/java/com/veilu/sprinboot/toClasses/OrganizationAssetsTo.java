@@ -3,9 +3,10 @@ package com.veilu.sprinboot.toClasses;
 public class OrganizationAssetsTo {
 	
 	private long orgId; 
+	private String orgName;
 	private long assetId; 
 	private String serialNumber;
-	private String orgName;
+	
 	public long getOrgId() {
 		return orgId;
 	}
