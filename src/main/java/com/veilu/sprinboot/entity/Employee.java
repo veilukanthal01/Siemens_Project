@@ -9,6 +9,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
@@ -30,6 +32,9 @@ public class Employee {
 	@Column(name = "last_name", nullable = false, length = 100)
 	private String lastName;
 	
+	@Column(name = "org_name", nullable = false, length = 100)
+	private String orgName;
+	
 	@Column(name = "designation", nullable = false, length = 100)
 	private String designation;
 	
@@ -42,6 +47,11 @@ public class Employee {
 	@JsonIgnore
 	@OneToMany(mappedBy = "employee", cascade = CascadeType.ALL)
 	Set<Assets> assets = new HashSet<Assets>();
+	
+	@JsonIgnore
+	@ManyToOne()
+	@JoinColumn(name = "org_id" , referencedColumnName = "id")
+	private Organization orgEmployees;
 	
 	public Employee() {
 		
@@ -110,6 +120,22 @@ public class Employee {
 
 	public void setAssets(Set<Assets> assets) {
 		this.assets = assets;
+	}
+
+	public String getOrgName() {
+		return orgName;
+	}
+
+	public void setOrgName(String orgName) {
+		this.orgName = orgName;
+	}
+
+	public Organization getOrgEmployees() {
+		return orgEmployees;
+	}
+
+	public void setOrgEmployees(Organization orgEmployees) {
+		this.orgEmployees = orgEmployees;
 	}
 	
 	

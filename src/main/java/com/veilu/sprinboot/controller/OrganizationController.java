@@ -55,7 +55,7 @@ public class OrganizationController {
 		}
 		
 	}
-	
+	//find all assets for the particular Organization
 	@GetMapping("/organization/{orgId}/assets")
 	public Set<Assets> getAssetsbyOrganization(@PathVariable long orgId){
 		return this.organizationService.getAssetsbyOrganization(orgId);
@@ -63,7 +63,7 @@ public class OrganizationController {
 	}
 	
 	@DeleteMapping("/{orgId}")
-	public String  deleteOrgById(@PathVariable long orgId){
+	public String  deleteOrgById(@PathVariable long orgId) {
 		this.organizationService.deleteOrgById(orgId);
 		return "success";
 		

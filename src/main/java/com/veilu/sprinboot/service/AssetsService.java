@@ -32,7 +32,7 @@ public class AssetsService {
 		return this.assetRepository.save(asset);
 		
 	}
-	public Assets mapAssetWithOrg(Assets asset){
+	public Assets mapAsset(Assets asset){
 		return this.assetRepository.save(asset);
 		
 	}

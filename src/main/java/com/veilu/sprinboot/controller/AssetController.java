@@ -16,12 +16,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.veilu.sprinboot.entity.Assets;
+import com.veilu.sprinboot.entity.Employee;
 import com.veilu.sprinboot.entity.Organization;
 import com.veilu.sprinboot.exception.AssetAlredayExistsException;
 import com.veilu.sprinboot.exception.AssetNotFoundException;
+import com.veilu.sprinboot.exception.EmployeeNotFoundException;
 import com.veilu.sprinboot.exception.OrganizationAlredayExistsException;
 import com.veilu.sprinboot.exception.OrganizationNotFoundException;
 import com.veilu.sprinboot.service.AssetsService;
+import com.veilu.sprinboot.service.EmployeeService;
 import com.veilu.sprinboot.service.OrganizationService;
 
 @RestController
@@ -33,6 +36,9 @@ public class AssetController {
 	
 	@Autowired
 	private OrganizationService organizationService;
+	
+	@Autowired
+	private EmployeeService employeeService;
 	
 	@GetMapping
 	public List<Assets> getAllAssets(){
@@ -51,6 +57,7 @@ public class AssetController {
 		
 	}
 	
+	//Map  assets to the particular Organization
 	@PutMapping("/{assetId}/organization/{orgId}") public ResponseEntity assignAssetToOrganization(
 			@PathVariable long assetId,
 			@PathVariable long orgId
@@ -59,7 +66,7 @@ public class AssetController {
 		Assets asset = assetsService.findById(assetId);
 		Organization org = organizationService.findById(orgId);
 		asset.setOrganization(org);
-		return new ResponseEntity<Assets>(this.assetsService.mapAssetWithOrg(asset), HttpStatus.OK);
+		return new ResponseEntity<Assets>(this.assetsService.mapAsset(asset), HttpStatus.OK);
 		}
 		catch(AssetNotFoundException aex) {
 			return new ResponseEntity<>(aex.getMessage(), HttpStatus.NOT_FOUND);
@@ -86,5 +93,25 @@ public class AssetController {
 		return"success";
 		
 	}
+	
+	//Assign assets to employees
+		@PutMapping("/{assetId}/employee/{empId}") public ResponseEntity assignAssetToEmployee(
+				@PathVariable long assetId,
+				@PathVariable long empId
+				) {
+			try {
+			Assets asset = assetsService.findById(assetId);
+			Employee emp = employeeService.findEmployeeById(empId);
+			asset.setEmployee(emp);
+			return new ResponseEntity<Assets>(this.assetsService.mapAsset(asset), HttpStatus.OK);
+			}
+			catch(AssetNotFoundException aex) {
+				return new ResponseEntity<>(aex.getMessage(), HttpStatus.NOT_FOUND);
+			}
+			catch (EmployeeNotFoundException ex) {
+				return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);
+			}
+			
+		}
 
 }

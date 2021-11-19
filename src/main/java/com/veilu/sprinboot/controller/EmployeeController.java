@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.veilu.sprinboot.entity.Employee;
 import com.veilu.sprinboot.entity.Organization;
+import com.veilu.sprinboot.exception.EmployeeAlredayExistsException;
 import com.veilu.sprinboot.exception.EmployeeNotFoundException;
 import com.veilu.sprinboot.exception.OrganizationAlredayExistsException;
 import com.veilu.sprinboot.exception.OrganizationNotFoundException;
@@ -43,12 +44,12 @@ public class EmployeeController {
 	
 	@PostMapping
 	public ResponseEntity createEmployee(@RequestBody Employee Employee) {
-		//try {
+		try {
 			 return new ResponseEntity<Employee>(this.employeeService.saveEmployee(Employee), HttpStatus.OK);
-		//}
-		/*catch (OrganizationAlredayExistsException ee){
+		}
+		catch (EmployeeAlredayExistsException ee){
 			return new ResponseEntity<>(ee.getMessage(), HttpStatus.CONFLICT);
-		}*/
+		}
 		
 	}
 	

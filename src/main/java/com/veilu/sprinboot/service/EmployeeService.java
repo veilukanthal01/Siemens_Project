@@ -20,6 +20,11 @@ public class EmployeeService {
 	private EmployeeRepository employeeRepository;
 	
 	public Employee saveEmployee(Employee employee) throws EmployeeAlredayExistsException{
+		List<Employee> empList = (List<Employee>) this.employeeRepository.findAll();
+		if(empList.stream().anyMatch(e-> e.getFirstName().equals(employee.getFirstName()) && e.getLastName().equals(employee.getLastName()) 
+				&& e.getDesignation().equals(employee.getDesignation()))) {
+			 throw new EmployeeAlredayExistsException("Employee alreday exists");
+		}
 		return this.employeeRepository.save(employee);
 		
 	}

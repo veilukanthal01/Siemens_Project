@@ -39,6 +39,10 @@ public class Organization {
 	@OneToMany(mappedBy = "organization", cascade = CascadeType.ALL)
 	Set<Assets> assets = new HashSet<Assets>();
 	
+	@JsonIgnore
+	@OneToMany(mappedBy = "orgEmployees", cascade = CascadeType.ALL)
+	Set<Employee> employees = new HashSet<Employee>();
+	
 	public Organization() {
 		
 	}
@@ -74,5 +78,14 @@ public class Organization {
 	public void setAssets(Set<Assets> assets) {
 		this.assets = assets;
 	}
+
+	public Set<Employee> getEmployees() {
+		return employees;
+	}
+
+	public void setEmployees(Set<Employee> employees) {
+		this.employees = employees;
+	}
+	
 	
 }
