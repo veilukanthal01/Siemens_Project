@@ -24,7 +24,7 @@ public class AssetsService {
 		
 	}
 	
-	public Assets saveAsset(Assets asset) throws AssetAlredayExistsException{
+	public Assets saveAsset(Assets asset) throws AssetAlredayExistsException {
 		Set<String> assetList = this.assetRepository.getAssetBySerialNumber();
 		if(assetList.stream().anyMatch(a-> a.equals(asset.getSerialNumber()))) {
 			 throw new AssetAlredayExistsException("Asset  alreday exists with the Serial Number: " + asset.getSerialNumber());

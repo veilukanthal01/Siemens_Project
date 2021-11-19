@@ -50,6 +50,9 @@ public class EmployeeController {
 		catch (EmployeeAlredayExistsException ee){
 			return new ResponseEntity<>(ee.getMessage(), HttpStatus.CONFLICT);
 		}
+		catch (OrganizationNotFoundException oe){
+			return new ResponseEntity<>(oe.getMessage(), HttpStatus.NOT_FOUND);
+		}
 		
 	}
 	
